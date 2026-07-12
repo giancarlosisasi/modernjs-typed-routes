@@ -30,5 +30,12 @@
     "rules": {
       "recommended": true
     }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!tests/e2e/fixtures/**",
+      "!examples/playground/src/routes.gen.d.ts"
+    ]
   }
 }
