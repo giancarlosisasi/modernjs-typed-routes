@@ -54,7 +54,9 @@
     "format": "biome format --write",
     "test": "rstest",
     "test:watch": "rstest --watch",
-    "lint:package": "publint && attw --pack ."
+    "lint:package": "publint && attw --pack .",
+    "test:e2e": "rstest --config rstest.e2e.config.ts",
+    "test:e2e:update": "node scripts/update-playground-snapshot.mjs"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
