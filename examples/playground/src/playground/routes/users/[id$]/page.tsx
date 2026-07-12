@@ -1,6 +1,7 @@
-import { useParams } from '@modern-js/runtime/router';
+import { useTypedParams } from 'modernjs-typed-routes';
 
+/** Dogfood: `useTypedParams` on an optional-param route (id may be absent). */
 export default function UserOptionalPage() {
-  const params = useParams();
-  return <h1>users-optional:{params.id ?? 'none'}</h1>;
+  const { id } = useTypedParams('/users/[id$]');
+  return <h1>users-optional:{id ?? 'none'}</h1>;
 }

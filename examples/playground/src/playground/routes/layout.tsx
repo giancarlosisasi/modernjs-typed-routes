@@ -1,4 +1,4 @@
-import { Outlet } from '@modern-js/runtime/router';
+import { Outlet } from 'modernjs-typed-routes';
 
 export default function RootLayout() {
   return (

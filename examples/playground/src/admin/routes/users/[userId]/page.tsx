@@ -1,6 +1,7 @@
-import { useParams } from '@modern-js/runtime/router';
+import { useTypedParams } from 'modernjs-typed-routes';
 
+/** Dogfood: entry-prefixed key in the SECOND entry (basename '/admin'). */
 export default function AdminUserDetailPage() {
-  const params = useParams();
-  return <h1>admin-user:{params.userId}</h1>;
+  const { userId } = useTypedParams('/admin/users/[userId]');
+  return <h1>admin-user:{userId}</h1>;
 }

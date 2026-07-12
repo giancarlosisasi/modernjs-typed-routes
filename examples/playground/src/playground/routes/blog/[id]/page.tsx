@@ -1,6 +1,12 @@
-import { useParams } from '@modern-js/runtime/router';
+import { Link, useTypedParams } from 'modernjs-typed-routes';
 
+/** Dogfood: `useTypedParams` on a required-param route. */
 export default function BlogDetailPage() {
-  const params = useParams();
-  return <h1>blog-detail:{params.id}</h1>;
+  const { id } = useTypedParams('/blog/[id]');
+  return (
+    <div>
+      <h1>blog-detail:{id}</h1>
+      <Link to="/blog">back to blog</Link>
+    </div>
+  );
 }

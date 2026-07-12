@@ -35,7 +35,8 @@
     "includes": [
       "**",
       "!tests/e2e/fixtures",
-      "!examples/playground/src/routes.gen.d.ts"
+      "!examples/playground/src/routes.gen.d.ts",
+      "!examples/playground/docs-snippets"
     ]
   },
   "overrides": [

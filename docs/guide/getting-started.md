@@ -52,7 +52,9 @@ declare module 'modernjs-typed-routes' {
       '/about': { params: {} };
       '/blog': { params: {} };
       '/blog/[id]': { params: { id: string | number } };
+      '/checkout': { params: {} };
       '/docs/$': { params: { '*': string } };
+      '/login': { params: {} };
       '/users/[id$]': { params: { id?: string | number } };
     };
   }
