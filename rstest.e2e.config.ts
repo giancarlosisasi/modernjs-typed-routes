@@ -11,4 +11,7 @@ export default defineConfig({
   testTimeout: 180_000,
   // One CLI at a time — they share the playground working tree.
   maxConcurrency: 1,
+  // CI machines are slow and the watch test is timing-sensitive; one retry
+  // there. Locally, flake must surface (flake policy in 05-testing-strategy).
+  retry: process.env.CI ? 1 : 0,
 });

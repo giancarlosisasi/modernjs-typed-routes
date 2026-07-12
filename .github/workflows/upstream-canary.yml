@@ -1,0 +1,71 @@
+name: Upstream canary
+
+# Detects breakage from new @modern-js releases within a week instead of via
+# user bug reports: bump the playground to @modern-js latest and run the E2E
+# suite (real CLI, real generated file). On failure, open or refresh a pinned
+# issue with the log tail.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install (pinned versions)
+        run: pnpm install --frozen-lockfile
+
+      - name: Bump playground to @modern-js latest
+        run: |
+          pnpm --dir examples/playground add @modern-js/runtime@latest
+          pnpm --dir examples/playground add -D @modern-js/app-tools@latest @modern-js/tsconfig@latest
+          echo "Playground now on:"
+          node -e "const p=require('./examples/playground/package.json');console.log(p.dependencies['@modern-js/runtime'],p.devDependencies['@modern-js/app-tools'])"
+
+      - name: Build the plugin
+        run: pnpm build
+
+      - name: E2E against @modern-js latest
+        run: |
+          set -o pipefail
+          pnpm test:e2e 2>&1 | tee canary-e2e.log
+
+      - name: Open or refresh the pinned canary issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create upstream-canary --description "Weekly @modern-js latest breakage" --color D93F0B --force
+          versions=$(node -e "const p=require('./examples/playground/package.json');console.log(p.devDependencies['@modern-js/app-tools'])" 2>/dev/null || echo "unknown")
+          {
+            echo "The weekly canary run failed against \`@modern-js@${versions}\` (latest)."
+            echo ""
+            echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo ""
+            echo '```'
+            tail -n 80 canary-e2e.log 2>/dev/null || echo "(no E2E log captured — failure happened before the test step)"
+            echo '```'
+          } > issue-body.md
+          existing=$(gh issue list --label upstream-canary --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file issue-body.md
+          else
+            gh issue create --title "Upstream canary: @modern-js latest breaks the E2E suite" \
+              --label upstream-canary --body-file issue-body.md
+          fi
