@@ -7,5 +7,5 @@ export default defineConfig({
   // fixture (must not create a route), not a real spec — keep the root
   // runner scoped to this package's own tests. E2E lives in its own config
   // (rstest.e2e.config.ts) because it runs the real Modern.js CLI (slow).
-  include: ['tests/{core,plugin}/**/*.test.{ts,tsx}'],
+  include: ['tests/{core,plugin,runtime}/**/*.test.{ts,tsx}'],
 });

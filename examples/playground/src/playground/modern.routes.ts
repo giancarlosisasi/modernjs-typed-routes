@@ -7,7 +7,7 @@ export default defineRoutes(({ page }, fileRoutes) => {
 
   // Override: replace the convention /about page with a config component.
   const aboutIndex = root.children?.findIndex(
-    route => route.path === 'about',
+    (route) => route.path === 'about',
   );
   if (aboutIndex !== undefined && aboutIndex >= 0) {
     root.children?.splice(aboutIndex, 1);

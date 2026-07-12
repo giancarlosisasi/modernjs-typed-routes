@@ -66,6 +66,18 @@ buildPath('/blog/[id]', { params: { id: 42 }, searchParams: { ref: 'rss' }, hash
 // => '/blog/42?ref=rss#top'
 ```
 
+Behavior details:
+
+- Param values are URL-encoded; splat (`'*'`) values keep their `/` separators (each piece is
+  encoded individually; leading slashes are normalized away).
+- An absent optional param (`[id$]`) or splat drops its segment cleanly — no `//` is ever
+  produced. `''` counts as absent (substituting it would build an unmatchable URL).
+- **A missing (or empty-string) required param throws** (naming the param and the path) instead of
+  emitting a broken URL — types prevent this in TS; plain-JS consumers fail fast at the call site.
+- With several optional segments in one path, omitting an EARLIER one while providing a later one
+  builds a shorter URL the router matches against the first optional slot — provide optionals
+  left-to-right.
+
 ## Types
 
 | Type | Meaning |

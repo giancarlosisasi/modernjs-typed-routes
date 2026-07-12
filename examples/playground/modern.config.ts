@@ -42,14 +42,14 @@ const spikePlugin = (): CliPlugin<AppTools> => ({
     api.onPrepare(() => {
       const ctx = api.getAppContext();
       dump('onPrepare', {
-        entrypoints: ctx.entrypoints?.map(e => ({
+        entrypoints: ctx.entrypoints?.map((e) => ({
           entryName: e.entryName,
           isMainEntry: e.isMainEntry,
           entry: e.entry,
           nestedRoutesEntry: e.nestedRoutesEntry,
           isAutoMount: e.isAutoMount,
         })),
-        serverRoutes: ctx.serverRoutes?.map(r => ({
+        serverRoutes: ctx.serverRoutes?.map((r) => ({
           entryName: r.entryName,
           urlPath: r.urlPath,
           entryPath: r.entryPath,
@@ -77,7 +77,7 @@ const spikePlugin = (): CliPlugin<AppTools> => ({
       return { entrypoint, code };
     });
 
-    api.onFileChanged(e => {
+    api.onFileChanged((e) => {
       dump('onFileChanged', { filename: e.filename, eventType: e.eventType });
     });
 
@@ -91,13 +91,13 @@ const spikePlugin = (): CliPlugin<AppTools> => ({
           dump('typegen-command', {
             hasGetHooks: typeof api.getHooks === 'function',
             hookKeys: api.getHooks ? Object.keys(api.getHooks()) : null,
-            entrypoints: ctx.entrypoints?.map(e => ({
+            entrypoints: ctx.entrypoints?.map((e) => ({
               entryName: e.entryName,
               isMainEntry: e.isMainEntry,
               nestedRoutesEntry: e.nestedRoutesEntry,
               isAutoMount: e.isAutoMount,
             })),
-            serverRoutes: ctx.serverRoutes?.map(r => ({
+            serverRoutes: ctx.serverRoutes?.map((r) => ({
               entryName: r.entryName,
               urlPath: r.urlPath,
             })),

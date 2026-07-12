@@ -34,8 +34,23 @@
   "files": {
     "includes": [
       "**",
-      "!tests/e2e/fixtures/**",
+      "!tests/e2e/fixtures",
       "!examples/playground/src/routes.gen.d.ts"
     ]
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["tests/types/**"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noBannedTypes": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    }
+  ]
 }
