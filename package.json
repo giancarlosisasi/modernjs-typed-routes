@@ -52,11 +52,12 @@
     "docs:dev": "rspress dev",
     "docs:preview": "rspress preview",
     "format": "biome format --write",
-    "test": "rstest",
+    "test": "rstest && pnpm run test:types",
     "test:watch": "rstest --watch",
     "lint:package": "publint && attw --pack .",
     "test:e2e": "rstest --config rstest.e2e.config.ts",
-    "test:e2e:update": "node scripts/update-playground-snapshot.mjs"
+    "test:e2e:update": "node scripts/update-playground-snapshot.mjs",
+    "test:types": "tsc -p tests/types/single && tsc -p tests/types/multi && tsc -p tests/types/empty"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
@@ -68,6 +69,7 @@
     "@rstest/adapter-rslib": "^0.10.6",
     "@rstest/core": "^0.10.6",
     "@types/node": "^24.13.2",
+    "expect-type": "^1.4.0",
     "publint": "^0.3.21",
     "typescript": "^6.0.3"
   },

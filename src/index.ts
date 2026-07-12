@@ -8,3 +8,18 @@
  */
 // biome-ignore lint/suspicious/noEmptyInterface: empty by design — populated by codegen via declaration merging
 export interface Register {}
+
+export type {
+  BuildArgs,
+  BuildOptions,
+  EntryRouteParams,
+  EntryRoutePath,
+  NavigateArgs,
+  NavigateToOptions,
+  RegisterEntryName,
+  RouteParams,
+  RoutePath,
+  RoutePathname,
+  SearchParamsInit,
+  StaticRoutePath,
+} from './runtime/register';
