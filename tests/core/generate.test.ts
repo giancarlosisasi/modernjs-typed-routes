@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, test } from '@rstest/core';
 import { generateRouteTypes } from '../../src/core';
 import type { RouteNode } from '../../src/core/types';
@@ -175,4 +177,16 @@ describe('hardening', () => {
     generateRouteTypes(singleEntry(tree), { onWarn: (m) => warnings.push(m) });
     expect(warnings).toHaveLength(1);
   });
+});
+
+// ---------------------------------------------------------------------------
+// Committed E2E snapshot stays in lockstep with the core expectation
+// ---------------------------------------------------------------------------
+
+test('tests/e2e/fixtures/playground-routes.gen.d.ts equals the multi-entry artifact', () => {
+  const snapshot = readFileSync(
+    join(__dirname, '../e2e/fixtures/playground-routes.gen.d.ts'),
+    'utf8',
+  );
+  expect(snapshot).toBe(MULTI_ENTRY_ARTIFACT);
 });
