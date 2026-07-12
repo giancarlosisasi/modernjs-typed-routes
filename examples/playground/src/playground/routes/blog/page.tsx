@@ -12,6 +12,10 @@ export default function BlogIndexPage() {
   return (
     <div>
       <h1>blog-index</h1>
+      <p>
+        Convention: index route (blog/page.tsx) under a nested layout, with a
+        data loader (page.data.ts) that builds URLs via buildPath.
+      </p>
       <p data-testid="loader-login-url">{data.loginUrl}</p>
       <p data-testid="create-url">
         {createUrl('/blog/[id]', {

@@ -1,0 +1,57 @@
+name: Bug report
+description: Something generated wrong types, crashed, or didn't regenerate.
+labels: ['bug']
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what happened instead?
+      placeholder: |
+        Added routes/blog/[id]/page.tsx, expected '/blog/[id]' in the generated types,
+        but got …
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: >
+        Minimal steps or a repo link. The relevant `routes/` folder structure (a
+        `tree`-style listing is perfect) usually matters most.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: modernjs-version
+    attributes:
+      label: Modern.js version
+      description: '`npx modern --version` (or the `@modern-js/app-tools` version in your lockfile)'
+      placeholder: 3.6.0
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: modernjs-typed-routes version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: generated-excerpt
+    attributes:
+      label: Generated file excerpt
+      description: >
+        The relevant part of `src/routes.gen.d.ts` (or state that the file was never
+        created / never updated).
+      render: ts
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version, TypeScript version, package manager
+      placeholder: Windows 11, Node 22, TS 5.7, pnpm 10
+    validations:
+      required: false

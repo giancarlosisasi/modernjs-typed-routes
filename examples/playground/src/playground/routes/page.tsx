@@ -5,6 +5,10 @@ export default function HomePage() {
   return (
     <div>
       <h1>home</h1>
+      <p>
+        Playground: every Modern.js routing convention, navigated exclusively
+        through typed wrappers. Each page says which convention it shows.
+      </p>
       <nav>
         <ul>
           <li>

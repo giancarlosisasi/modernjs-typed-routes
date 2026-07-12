@@ -6,6 +6,7 @@ export default function BlogDetailPage() {
   return (
     <div>
       <h1>blog-detail:{id}</h1>
+      <p>Convention: dynamic param — blog/[id]/page.tsx → /blog/:id.</p>
       <Link to="/blog">back to blog</Link>
     </div>
   );
