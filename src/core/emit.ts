@@ -22,18 +22,11 @@ function renderParams(params: RouteParam[]): string {
   return `{ ${params.map(renderParam).join('; ')} }`;
 }
 
-/**
- * Renders `RouteInfo[]` into the generated `.d.ts` source string — the exact
- * artifact documented in docs/guide/getting-started.md. Pure string building:
- * the template IS the format (2-space indent, `\n` endings, one trailing
- * newline, keys sorted by literal path). Deterministic for any input order.
- */
-export function emit(
+function renderRoutesBlock(
   routes: RouteInfo[],
-  options: Partial<GeneratorOptions> = {},
-): string {
-  const { trailingSlash = false, banner } = options;
-
+  indent: string,
+  trailingSlash: boolean,
+): string[] {
   const keyOf = (route: RouteInfo): string =>
     trailingSlash && route.literalPath !== '/'
       ? `${route.literalPath}/`
@@ -43,26 +36,79 @@ export function emit(
     a.literalPath < b.literalPath ? -1 : a.literalPath > b.literalPath ? 1 : 0,
   );
 
-  const routeLines = sorted.map(
-    (route) =>
-      `      '${keyOf(route)}': { params: ${renderParams(route.params)} };`,
-  );
+  if (sorted.length === 0) return [`${indent}routes: {};`];
+  return [
+    `${indent}routes: {`,
+    ...sorted.map(
+      (route) =>
+        `${indent}  '${keyOf(route)}': { params: ${renderParams(route.params)} };`,
+    ),
+    `${indent}};`,
+  ];
+}
 
-  const routesBlock =
-    routeLines.length === 0
-      ? ['    routes: {};']
-      : ['    routes: {', ...routeLines, '    };'];
-
+function wrapModule(bodyLines: string[], banner?: string): string {
   const lines = [
     ...HEADER,
     ...(banner ? [banner] : []),
     'export {};',
     "declare module 'modernjs-typed-routes' {",
     '  interface Register {',
-    ...routesBlock,
+    ...bodyLines,
     '  }',
     '}',
   ];
-
   return `${lines.join('\n')}\n`;
+}
+
+/**
+ * Renders one entry's `RouteInfo[]` into the single-entry `.d.ts` artifact —
+ * the exact shape documented in docs/guide/getting-started.md (plain
+ * `Register.routes`). Pure string building: the template IS the format
+ * (2-space indent, `\n` endings, one trailing newline, keys sorted by
+ * literal path). Deterministic for any input order.
+ */
+export function emit(
+  routes: RouteInfo[],
+  options: Partial<GeneratorOptions> = {},
+): string {
+  const { trailingSlash = false, banner } = options;
+  return wrapModule(renderRoutesBlock(routes, '    ', trailingSlash), banner);
+}
+
+export type EmitEntry = {
+  entryName: string;
+  /** Entry mount prefix (`serverRoutes[].urlPath`), e.g. `'/'` or `'/admin'`. */
+  basename: string;
+  routes: RouteInfo[];
+};
+
+/**
+ * Renders the full Register artifact for any number of entries:
+ * - 0 or 1 entry → the plain `Register.routes` shape (getting-started.md);
+ * - 2+ entries → the per-entry-isolated `Register.entries` map keyed by
+ *   entry name with its `basename` (route-conventions.md, decision D13),
+ *   sorted by entry name for determinism.
+ */
+export function emitRegister(
+  entries: EmitEntry[],
+  options: Partial<GeneratorOptions> = {},
+): string {
+  if (entries.length <= 1) {
+    return emit(entries[0]?.routes ?? [], options);
+  }
+
+  const { trailingSlash = false, banner } = options;
+  const sorted = [...entries].sort((a, b) =>
+    a.entryName < b.entryName ? -1 : a.entryName > b.entryName ? 1 : 0,
+  );
+
+  const entryLines = sorted.flatMap((entry) => [
+    `      ${asKey(entry.entryName)}: {`,
+    `        basename: '${entry.basename}';`,
+    ...renderRoutesBlock(entry.routes, '        ', trailingSlash),
+    '      };',
+  ]);
+
+  return wrapModule(['    entries: {', ...entryLines, '    };'], banner);
 }
