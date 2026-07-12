@@ -13,7 +13,11 @@
     "typescript"
   ],
   "license": "MIT",
+  "author": "Giancarlos Isasi <giancarlos.isasi@gmail.com>",
   "packageManager": "pnpm@11.10.0",
+  "engines": {
+    "node": ">=20"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/giancarlosisasi/modernjs-typed-routes.git"
@@ -92,7 +96,6 @@
     "react-dom": "^19.2.7",
     "typescript": "^6.0.3"
   },
-  "private": true,
   "module": "./dist/index.js",
   "sideEffects": false,
   "peerDependencies": {
