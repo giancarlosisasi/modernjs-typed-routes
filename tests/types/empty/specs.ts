@@ -6,6 +6,7 @@
 import { expectTypeOf } from 'expect-type';
 import type {
   NavigateArgs,
+  RegisterEntryName,
   RouteParams,
   RoutePath,
   StaticRoutePath,
@@ -13,6 +14,9 @@ import type {
 
 expectTypeOf<RoutePath>().toEqualTypeOf<string>();
 expectTypeOf<StaticRoutePath>().toEqualTypeOf<string>();
+
+// no generation yet → no entries → entry names are `never`
+expectTypeOf<RegisterEntryName>().toEqualTypeOf<never>();
 
 // params degrade to a permissive record
 expectTypeOf<RouteParams<'/anything'>>().toEqualTypeOf<

@@ -1,9 +1,5 @@
 # Getting Started
 
-:::warning Design preview
-The package is not published yet — this page defines the target setup experience.
-:::
-
 ## 1. Install
 
 ```bash
@@ -30,8 +26,10 @@ export default defineConfig({
 
 ## 3. Generate
 
-Types are generated automatically when you run `modern dev` or `modern build`, and regenerate on
-every route file change while the dev server runs. To generate without starting anything (e.g. CI):
+Types are generated automatically when you run `modern dev` or `modern build`, and regenerate
+whenever your routes change while the dev server runs — a route file is added, removed or renamed,
+or `modern.routes.ts` is edited. (Editing a page's *content* doesn't regenerate anything: the
+routes didn't change.) To generate without starting anything (e.g. CI):
 
 ```bash
 npx modern typegen
@@ -116,7 +114,10 @@ Catch broken links in pull requests:
 
 ## Troubleshooting
 
-- **Types don't update in the editor** — the file regenerated but TS server cached it: run
+- **Types don't update in the editor** — the file regenerated but the TS server cached it: run
   "TypeScript: Restart TS Server". This is rare; the dev server keeps the file current.
 - **`to` accepts any string** — the `Register` is empty because types were never generated. Run
   `npx modern typegen` and confirm `src/routes.gen.d.ts` exists and is inside your tsconfig `include`.
+
+More cases (multi-entry, monorepos, custom basename, lint tools) in the full
+[Troubleshooting guide](/guide/troubleshooting).

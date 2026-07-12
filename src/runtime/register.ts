@@ -36,8 +36,14 @@ type EntriesMap = Register extends { entries: infer E extends EntriesShape }
 type HasSingle = [SingleRoutes] extends [never] ? false : true;
 type HasEntries = [EntriesMap] extends [never] ? false : true;
 
-/** Entry names of a multi-entry Register (`never` for single-entry/empty). */
-export type RegisterEntryName = keyof EntriesMap & string;
+/**
+ * Entry names of a multi-entry Register (`never` for single-entry/empty).
+ * The `HasEntries` guard is required: with `EntriesMap = never`,
+ * `keyof never & string` collapses to `string`, not `never`.
+ */
+export type RegisterEntryName = HasEntries extends true
+  ? keyof EntriesMap & string
+  : never;
 
 type RoutesOf<E extends RegisterEntryName> = EntriesMap[E]['routes'];
 

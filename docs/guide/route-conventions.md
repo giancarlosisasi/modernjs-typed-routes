@@ -1,9 +1,5 @@
 # Route conventions → generated types
 
-:::warning Design preview
-API contract, pre-implementation.
-:::
-
 The plugin consumes the route tree Modern.js itself parses, so every conventional-routing feature is
 supported. Path literals in the generated types use the **bracket style you see on disk** (`[id]`,
 `[id$]`, `$`) — not React Router's `:id` syntax — so autocomplete matches your folder names.
@@ -32,9 +28,12 @@ Notes:
 
 ## Config routes (`modern.routes.ts`)
 
-Routes defined or overridden with `defineRoutes` in `src/modern.routes.ts` are part of the tree the
-plugin receives, so they're typed too — something a filesystem scanner could never see. Paths coming
-from config routes keep bracket style in the generated keys (`:id` is normalized to `[id]`).
+Routes defined or overridden with `defineRoutes` in `modern.routes.ts` are part of the tree the
+plugin receives, so they're typed too — something a filesystem scanner could never see. The file
+lives next to your entry's `routes/` folder (`src/modern.routes.ts` in a single-entry app,
+`src/<entry-dir>/modern.routes.ts` per entry in a multi-entry one — the main entry keeps its own
+directory name on disk even though Modern.js names the entry `index`). Paths coming from config routes
+keep bracket style in the generated keys (`:id` is normalized to `[id]`).
 
 ## Multi-entry apps
 
@@ -57,14 +56,11 @@ declare module 'modernjs-typed-routes' {
 
 - **Single-entry apps never see this layer** — `RoutePath` and all wrappers just work with your
   routes, as shown everywhere else in these docs.
-- Multi-entry apps use entry-scoped types (`EntryRoutePath<'admin'>` and friends) so one entry's
-  routes never pollute another's autocomplete. Route keys include the entry mount prefix
-  (`/admin/…`), so literals always equal real URLs.
-
-:::info Final shape in validation
-The entry-scoped helper API is being finalized against a real multi-entry fixture app — the
-isolation guarantee above is settled; helper names may still be refined.
-:::
+- In multi-entry apps, the plain `RoutePath` union spans **all** entries — route keys include the
+  entry mount prefix (`/admin/…`), so every literal equals a real URL. For entry-scoped
+  autocomplete (one entry's routes never polluting another's), use the entry-scoped types:
+  `EntryRoutePath<'admin'>`, `EntryRouteParams<'admin', P>` and `RegisterEntryName` — see the
+  [Runtime API](/api/runtime).
 
 :::warning Cross-entry navigation
 Each entry is its own SPA bundle, so jumping between entries needs a full page load — exactly as in

@@ -1,9 +1,5 @@
 # Plugin options
 
-:::warning Design preview
-API contract, pre-implementation.
-:::
-
 ```ts title="modern.config.ts"
 import { routeTypesPlugin } from 'modernjs-typed-routes/plugin';
 
@@ -59,8 +55,10 @@ CI pipelines (`modern typegen && tsc --noEmit`).
 
 ## Behavior notes
 
-- Generation runs on `modern dev` startup, on every route file add/change/delete while the dev
-  server runs, and once during `modern build`.
+- Generation runs on `modern dev` startup, once during `modern build`, and — while the dev server
+  runs — whenever the routes change: a route file is added, removed or renamed, or a
+  `modern.routes.ts` is edited. Content edits to an existing page don't trigger regeneration
+  (the route set didn't change).
 - The file is only rewritten when its content actually changed (no watcher churn, stable mtimes).
 - Output is deterministic: route keys are sorted, formatting is stable, line endings are `\n`.
 - Errors never crash your dev server — they're logged with a `[modernjs-typed-routes]` prefix and

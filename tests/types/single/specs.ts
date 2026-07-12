@@ -6,6 +6,7 @@ import { expectTypeOf } from 'expect-type';
 import type {
   NavigateArgs,
   NavigateToOptions,
+  RegisterEntryName,
   RouteParams,
   RoutePath,
   RoutePathname,
@@ -28,6 +29,10 @@ expectTypeOf<RoutePath>().toEqualTypeOf<
 >();
 
 expectTypeOf<RoutePathname>().toEqualTypeOf<RoutePath>();
+
+// single-entry apps have NO entries map — entry names must be `never`
+// (docs/api/runtime.md §Entry-scoped types)
+expectTypeOf<RegisterEntryName>().toEqualTypeOf<never>();
 
 // @ts-expect-error — not a route
 const invalidPath: RoutePath = '/nope';

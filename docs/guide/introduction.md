@@ -1,11 +1,5 @@
 # Introduction
 
-:::warning Design preview
-These docs are written **docs-first**: they define the API contract before the implementation ships.
-The package is not published yet. Anything here may still change — feedback welcome on
-[GitHub](https://github.com/giancarlosisasi/modernjs-typed-routes).
-:::
-
 ## The problem
 
 Modern.js gives you excellent file-based routing on top of React Router v7 — but navigation is
@@ -68,8 +62,15 @@ they can't drift from what the framework actually serves.
 | Search params | basic (validated planned) | ❌ | ❌ | ✅ validated |
 | Bundle cost | none (types only) | none | none | runtime router |
 
-## Requirements
+## Requirements & compatibility
 
-- Modern.js **v3** (`@modern-js/app-tools` ^3) with conventional `routes/` entries
-- TypeScript ≥ 5.0
-- Not supported: the legacy `pages/` convention and self-controlled (`App.tsx`) entries
+| | Supported |
+|---|---|
+| Modern.js | **v3** — `@modern-js/app-tools` / `@modern-js/runtime` `^3.6.0` (developed and tested against 3.6) |
+| Node.js | ≥ 20 (Modern.js v3.6's own floor) |
+| TypeScript | ≥ 5.3 — Modern.js 3.6's own toolchain types don't parse on 5.2 and older (verified on 5.3 and 6.0) |
+| React | ≥ 18 |
+
+Routing must use conventional `routes/` entries. **Not supported:** Modern.js v2, the legacy
+`pages/` convention, and self-controlled (`App.tsx`) entries — there's no conventional route tree
+to type.

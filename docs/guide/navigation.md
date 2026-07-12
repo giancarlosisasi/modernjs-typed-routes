@@ -1,9 +1,5 @@
 # Navigation
 
-:::warning Design preview
-API contract, pre-implementation. Signatures here are the source of truth for the implementation.
-:::
-
 The core rule everywhere in this API:
 
 > **Routes without required params accept a plain string. Routes with required params require a

@@ -1,9 +1,5 @@
 # Runtime API
 
-:::warning Design preview
-API contract, pre-implementation.
-:::
-
 Everything below is imported from the package root:
 
 ```ts
@@ -86,12 +82,25 @@ Behavior details:
 
 | Type | Meaning |
 |---|---|
-| `Register` | The empty interface your generated file merges `routes` into |
-| `RoutePath` | Union of all route keys (falls back to `string` before first generation) |
+| `Register` | The empty interface your generated file merges `routes` (or `entries`) into |
+| `RoutePath` | Union of all route keys — across every entry in multi-entry apps (falls back to `string` before first generation) |
 | `RoutePathname` | Alias of `RoutePath`, for app-level props (`RoutePathname \| (string & {})`) |
 | `RouteParams<P>` | Write-side params for route `P` (values `string \| number`) |
 | `StaticRoutePath` | Only the routes callable without `params` |
 | `SearchParamsInit` | `Record<string, string \| number \| boolean>` |
+| `BuildOptions<P>` | Options for `buildPath` / `createUrl` (`params` conditionally required) |
+| `NavigateToOptions<P>` | `BuildOptions<P> & { replace?; state? }` |
+
+### Entry-scoped types (multi-entry apps)
+
+| Type | Meaning |
+|---|---|
+| `RegisterEntryName` | Union of entry names (`'index' \| 'admin' \| …`); `never` in single-entry apps |
+| `EntryRoutePath<E>` | Route keys belonging to entry `E` only |
+| `EntryRouteParams<E, P>` | Write-side params for route `P` of entry `E` |
+
+Use these to keep one entry's routes out of another's autocomplete — see
+[Multi-entry apps](/guide/route-conventions#multi-entry-apps).
 
 ## Re-exports
 
