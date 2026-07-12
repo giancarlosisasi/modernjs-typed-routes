@@ -1,6 +1,18 @@
 {
-  "name": "modernjs-route-types-plugin",
-  "version": "1.0.0",
+  "name": "modernjs-typed-routes",
+  "version": "0.0.0",
+  "description": "Type-safe routes for Modern.js apps — generates TypeScript types from your file-based routes and ships typed Link, Navigate and useNavigate wrappers.",
+  "keywords": [
+    "modernjs",
+    "modern.js",
+    "typed-routes",
+    "typesafe",
+    "react-router",
+    "codegen",
+    "routes",
+    "typescript"
+  ],
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
@@ -21,6 +33,9 @@
     "build": "rslib",
     "check": "biome check --write",
     "dev": "rslib --watch",
+    "docs:build": "rspress build",
+    "docs:dev": "rspress dev",
+    "docs:preview": "rspress preview",
     "format": "biome format --write",
     "test": "rstest",
     "test:watch": "rstest --watch"
@@ -28,6 +43,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
     "@rslib/core": "^0.23.2",
+    "@rspress/core": "^2.0.17",
     "@rstest/adapter-rslib": "^0.10.6",
     "@rstest/core": "^0.10.6",
     "@types/node": "^24.13.2",
