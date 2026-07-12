@@ -77,6 +77,10 @@ Behavior details:
 - With several optional segments in one path, omitting an EARLIER one while providing a later one
   builds a shorter URL the router matches against the first optional slot — provide optionals
   left-to-right.
+- `buildPath` is **basename-unaware** (it's pure — no router context). Multi-entry keys already
+  carry their mount prefix, so their built URLs are real URLs; but a custom
+  `runtime.router.basename` is NOT prepended — inside components, use `createUrl` (which reads the
+  active basename) when you need the full browser URL.
 
 ## Types
 

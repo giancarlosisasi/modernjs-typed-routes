@@ -2,7 +2,8 @@
  * Type-level specs — multi-entry Register (D13 per-entry isolation).
  * Design (finalized here from the spike evidence + docs contract):
  * - plain `RoutePath` = union across ALL entries (keys carry the mount
- *   prefix, so every literal is a real URL and `<Link>` works cross-entry);
+ *   prefix, so every literal is a real URL; cross-entry jumps still need
+ *   `buildPath` + plain anchor/`window.location` — docs §Cross-entry);
  * - `EntryRoutePath<'admin'>` & `EntryRouteParams<…>` give the isolation
  *   promised in docs/guide/route-conventions.md §Multi-entry apps.
  */

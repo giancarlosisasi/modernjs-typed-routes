@@ -7,6 +7,7 @@
     "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": false,
+    "jsx": "react-jsx",
     "paths": {
       "modernjs-typed-routes": ["../../src/index.ts"]
     }

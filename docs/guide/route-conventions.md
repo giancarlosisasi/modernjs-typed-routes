@@ -67,9 +67,17 @@ isolation guarantee above is settled; helper names may still be refined.
 :::
 
 :::warning Cross-entry navigation
-Each entry is its own SPA bundle. `<Link>` across entries works (it renders a real `<a>`, producing
-a full page load), but imperative `navigateTo` across entries is not client-side routable — prefer
-`<Link>` or `window.location` for cross-entry jumps.
+Each entry is its own SPA bundle, so jumping between entries needs a full page load — exactly as in
+a vanilla Modern.js app. In-entry navigation needs no care: typed keys carry the mount prefix and
+the wrappers reconcile it with the router basename automatically. Across entries:
+
+- **From the main entry** (mounted at `/`): typed `<Link>` hrefs are correct — add `reloadDocument`
+  (a router prop we pass through) so the browser does a real page load instead of a client-side
+  transition.
+- **From a secondary entry** (mounted at `/admin`, …): the router prepends its basename to every
+  `<Link>`/`navigateTo`/`createUrl` target, so typed navigation cannot leave the entry. Use a plain
+  `<a href={buildPath(…)}>` or `window.location.assign(buildPath(…))` — `buildPath` is
+  basename-unaware, so its output is exactly the cross-entry URL.
 :::
 
 ## Trailing slashes

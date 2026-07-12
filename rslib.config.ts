@@ -1,3 +1,4 @@
+import { pluginReact } from '@rsbuild/plugin-react';
 import { defineConfig } from '@rslib/core';
 
 // Two subpath exports (02-architecture.md §Build & packaging):
@@ -10,6 +11,11 @@ const runtimeExternals = [/^react($|\/)/, /^@modern-js\/runtime($|\/)/];
 const pluginExternals = [/^@modern-js\/app-tools($|\/)/];
 
 export default defineConfig({
+  // Automatic JSX runtime for the .tsx runtime modules — WITHOUT this the
+  // bundles emit bare `React.createElement` with no import and every
+  // `<Link>` render throws `React is not defined` (caught by adversary
+  // review 3.3; dist smoke test in the E2E suite pins it).
+  plugins: [pluginReact()],
   lib: [
     {
       format: 'esm',

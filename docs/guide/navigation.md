@@ -29,6 +29,8 @@ import { Link } from 'modernjs-typed-routes';
 
 // Splat route — the remainder goes in '*'
 <Link to="/docs/$" params={{ '*': 'guide/advanced' }}>Docs</Link>
+// Link to the splat root itself with an empty remainder
+<Link to="/docs/$" params={{ '*': '' }}>Docs home</Link>
 
 // Search params and hash
 <Link to="/blog" searchParams={{ page: 2, tag: 'dx' }} hash="comments">

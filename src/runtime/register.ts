@@ -10,9 +10,11 @@
  *
  * Multi-entry design (finalized in phase 3 from the spike evidence):
  * plain `RoutePath` is the union across ALL entries — every literal equals a
- * real URL, so `<Link>` (a real `<a>`) works cross-entry. The entry-scoped
- * lookups (`EntryRoutePath`, `EntryRouteParams`) provide the per-entry
- * isolation for teams that want scope-strict autocomplete.
+ * real URL. Typed navigation still cannot LEAVE a secondary entry (the router
+ * prepends its basename to every target); cross-entry jumps go through
+ * `buildPath` + a plain anchor/`window.location` (docs §Cross-entry). The
+ * entry-scoped lookups (`EntryRoutePath`, `EntryRouteParams`) provide the
+ * per-entry isolation for teams that want scope-strict autocomplete.
  *
  * With an EMPTY `Register` (fresh install, nothing generated yet) everything
  * degrades to plain `string` paths with optional permissive params — it must
@@ -102,15 +104,34 @@ export type EntryRouteParams<
 
 export type SearchParamsInit = Record<string, string | number | boolean>;
 
-type BaseBuildOptions = {
+export type BaseBuildOptions = {
   searchParams?: SearchParamsInit;
   hash?: string;
 };
 
-type WithParams<P extends RoutePath> =
+/**
+ * `params` prop/option: required iff the route has required params (D8).
+ * Keyless params (`{}`) are tightened to `Record<string, never>` so passing
+ * params to a static route is a type error (TS never excess-checks against
+ * `{}`); the empty-Register fallback keeps `keyof = string` and stays
+ * permissive.
+ */
+export type WithParams<P extends RoutePath> =
   Record<string, never> extends RouteParams<P>
-    ? { params?: RouteParams<P> }
+    ? {
+        params?: [keyof RouteParams<P>] extends [never]
+          ? Record<string, never>
+          : RouteParams<P>;
+      }
     : { params: RouteParams<P> };
+
+/**
+ * Read-side params for `useTypedParams` — values are always `string`
+ * (that's what the URL contains); optionality is preserved.
+ */
+export type RouteReadParams<P extends RoutePath> = {
+  [K in keyof RouteParams<P>]: string;
+};
 
 /** Options for `buildPath` / `createUrl` — `params` conditionally required (D8). */
 export type BuildOptions<P extends RoutePath> = BaseBuildOptions &
