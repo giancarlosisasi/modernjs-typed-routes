@@ -38,14 +38,17 @@ from config routes keep bracket style in the generated keys (`:id` is normalized
 
 ## Multi-entry apps
 
-Every conventional-routing entry gets its **own isolated set of route types**, keyed by entry name:
+Every conventional-routing entry gets its **own isolated set of route types**, keyed by entry name.
+Modern.js names the main entry `index` regardless of your package name; other entries keep their
+directory name:
 
 ```ts
 declare module 'modernjs-typed-routes' {
   interface Register {
     entries: {
-      main:  { routes: { '/': { params: {} } /* … */ } };
-      admin: { routes: { '/admin/': { params: {} };
+      index: { basename: '/'; routes: { '/': { params: {} } /* … */ } };
+      admin: { basename: '/admin';
+               routes: { '/admin': { params: {} };
                          '/admin/users/[userId]': { params: { userId: string | number } } } };
     };
   }

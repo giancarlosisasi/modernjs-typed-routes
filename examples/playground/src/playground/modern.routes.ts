@@ -19,3 +19,4 @@ export default defineRoutes(({ page }, fileRoutes) => {
 
   return fileRoutes;
 });
+
