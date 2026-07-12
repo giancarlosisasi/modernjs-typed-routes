@@ -31,10 +31,13 @@ jobs:
       - name: Install (pinned versions)
         run: pnpm install --frozen-lockfile
 
-      - name: Bump playground to @modern-js latest
+      - name: Bump @modern-js to latest (playground + root)
         run: |
           pnpm --dir examples/playground add @modern-js/runtime@latest
           pnpm --dir examples/playground add -D @modern-js/app-tools@latest @modern-js/tsconfig@latest
+          # Root too: the dist-runtime E2E smoke resolves @modern-js/runtime
+          # from the root node_modules — without this it tests the pinned one.
+          pnpm add -D -w @modern-js/runtime@latest @modern-js/app-tools@latest
           echo "Playground now on:"
           node -e "const p=require('./examples/playground/package.json');console.log(p.dependencies['@modern-js/runtime'],p.devDependencies['@modern-js/app-tools'])"
 

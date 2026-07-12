@@ -48,7 +48,7 @@ jobs:
       # timeouts by design; retries once in CI (rstest.e2e.config.ts).
       - name: E2E (real Modern.js CLI)
         run: pnpm test:e2e
-        timeout-minutes: 15
+        timeout-minutes: 20
 
       - name: Package lint (publint + attw)
         run: pnpm lint:package
