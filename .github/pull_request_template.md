@@ -10,4 +10,5 @@
 - [ ] Snapshot: regenerated via `pnpm test:e2e:update` if the generated format or the
       playground's routes changed (never hand-edited)
 - [ ] `pnpm test`, `pnpm check` and (if `src/` changed) `pnpm build && pnpm test:e2e` are green
-- [ ] Changeset included if user-facing behavior changed (skip for docs/internal-only)
+- [ ] Changeset included if user-facing behavior changed (tooling arrives with v0.1.0 — until
+      then the maintainer handles versioning, skip this)

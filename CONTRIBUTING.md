@@ -9,15 +9,19 @@ The Rspress site under [`docs/`](./docs) defines the public API. Code follows do
 other way around:
 
 - **Changing behavior?** Change the docs page and the code in the same PR.
-- Code blocks in `docs/guide/getting-started.md` and `docs/guide/navigation.md` are **compiled in
-  CI** (mirrored 1:1 under `examples/playground/docs-snippets/`). If you edit a snippet in the
-  docs, update its mirror — `pnpm test` fails otherwise.
+- Code blocks in `docs/guide/getting-started.md` and `docs/guide/navigation.md` are mirrored 1:1
+  under `examples/playground/docs-snippets/` and **typechecked by `pnpm test`** — a snippet that
+  stops compiling fails the suite. Keeping the mirror text in sync with the docs is manual
+  (there's no automated drift check yet), so update both sides in the same PR.
 - If a change would alter the public API surface, open an issue first.
 
 ## Prerequisites
 
 - Node.js ≥ 20
-- [pnpm](https://pnpm.io) ≥ 9 (`corepack enable` works)
+- [pnpm](https://pnpm.io) ≥ 9 (`corepack enable` works — `package.json` pins the exact version)
+- Windows only: clone into a reasonably short path (e.g. `C:\dev\...`). Very deep paths can hit
+  Windows' 260-char limit inside `node_modules` and break the docs build with confusing
+  module-resolution errors.
 
 ## Setup
 
@@ -41,7 +45,7 @@ tests/
   types/                   type-level suite: three tsc projects (single / multi / empty Register)
   e2e/                     real-CLI E2E against the playground (see tests/e2e/README.md)
 examples/playground/       real Modern.js app exercising EVERY routing convention (fixture + dogfood)
-examples/playground/docs-snippets/   1:1 mirrors of the docs' code blocks, typechecked in CI
+examples/playground/docs-snippets/   1:1 mirrors of the docs' code blocks, typechecked by `pnpm test`
 docs/                      Rspress docs site — the API contract
 scripts/                   snapshot update + playground typecheck helpers
 ```
@@ -64,8 +68,9 @@ Notes:
 
 - **`pnpm build` before `test:e2e` or `lint:package`** — both consume `dist/`. Stale dist means
   confusing failures.
-- The E2E suite is serial by design and generous with timeouts; quirks (Windows process kill,
-  ports, transient Modern.js rebuild errors) are documented in
+- The E2E suite is serial by design and generous with timeouts (usually well under a minute, up
+  to a few minutes on slow machines); quirks (Windows process kill, ports, transient Modern.js
+  rebuild errors) are documented in
   [`tests/e2e/README.md`](./tests/e2e/README.md).
 - We work **test-first**: a behavior change starts with a failing spec. PRs that change behavior
   without touching a spec will be asked to add one.
@@ -99,7 +104,7 @@ comparison, and the docs' conventions table).
 
 ## Style
 
-- Biome for lint + format: `pnpm check` (auto-fixes). CI runs it read-only.
+- Biome for lint + format: `pnpm check` (auto-fixes).
 - Conventional-commit style messages (`feat:`, `fix:`, `docs:`, `test:`, `chore:`).
 - Generated artifacts and `\n` line endings are non-negotiable: output must be deterministic and
   Windows-safe (the project is developed on Windows).

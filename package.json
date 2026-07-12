@@ -13,6 +13,7 @@
     "typescript"
   ],
   "license": "MIT",
+  "packageManager": "pnpm@11.10.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/giancarlosisasi/modernjs-typed-routes.git"
