@@ -13,6 +13,13 @@
     "typescript"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giancarlosisasi/modernjs-typed-routes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/giancarlosisasi/modernjs-typed-routes/issues"
+  },
   "type": "module",
   "exports": {
     ".": {

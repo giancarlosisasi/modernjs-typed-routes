@@ -33,3 +33,7 @@ features:
     details: Full re-export of @modern-js/runtime/router, originalNavigate for raw navigation, and a RoutePathname union for your own APIs.
     icon: 🔓
 ---
+
+## See it in action
+
+![Demo: route autocomplete, typo'd path error, required params](/demo.gif)
