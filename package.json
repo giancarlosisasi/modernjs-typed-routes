@@ -16,9 +16,24 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./plugin": {
+      "import": {
+        "types": "./dist/plugin/index.d.ts",
+        "default": "./dist/plugin/index.js"
+      },
+      "require": {
+        "types": "./dist/plugin/index.d.cts",
+        "default": "./dist/plugin/index.cjs"
+      }
     }
   },
   "main": "./dist/index.cjs",
@@ -38,16 +53,40 @@
     "docs:preview": "rspress preview",
     "format": "biome format --write",
     "test": "rstest",
-    "test:watch": "rstest --watch"
+    "test:watch": "rstest --watch",
+    "lint:package": "publint && attw --pack ."
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@biomejs/biome": "2.4.15",
+    "@microsoft/api-extractor": "^7.58.9",
+    "@modern-js/app-tools": "3.6.0",
     "@rslib/core": "^0.23.2",
     "@rspress/core": "^2.0.17",
     "@rstest/adapter-rslib": "^0.10.6",
     "@rstest/core": "^0.10.6",
     "@types/node": "^24.13.2",
+    "publint": "^0.3.21",
     "typescript": "^6.0.3"
   },
-  "private": true
+  "private": true,
+  "module": "./dist/index.js",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@modern-js/app-tools": "^3.6.0",
+    "@modern-js/runtime": "^3.6.0",
+    "react": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "@modern-js/app-tools": {
+      "optional": true
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "plugin": [
+        "./dist/plugin/index.d.ts"
+      ]
+    }
+  }
 }

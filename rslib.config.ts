@@ -1,15 +1,43 @@
 import { defineConfig } from '@rslib/core';
 
+// Two subpath exports (02-architecture.md §Build & packaging):
+// - '.'        → runtime (React, browser-safe). Peers stay external.
+// - './plugin' → Modern.js CLI plugin (Node). app-tools is types-only/peer.
+const runtimeEntry = { index: './src/index.ts' };
+const pluginEntry = { 'plugin/index': './src/plugin/index.ts' };
+
+const runtimeExternals = [/^react($|\/)/, /^@modern-js\/runtime($|\/)/];
+const pluginExternals = [/^@modern-js\/app-tools($|\/)/];
+
 export default defineConfig({
   lib: [
     {
       format: 'esm',
-      syntax: ['node 22'],
-      dts: true,
+      syntax: 'es2022',
+      dts: { bundle: true, autoExtension: true },
+      source: { entry: runtimeEntry },
+      output: { externals: runtimeExternals },
     },
     {
       format: 'cjs',
-      syntax: ['node 22'],
+      syntax: 'es2022',
+      dts: { bundle: true, autoExtension: true },
+      source: { entry: runtimeEntry },
+      output: { externals: runtimeExternals },
+    },
+    {
+      format: 'esm',
+      syntax: ['node 20'],
+      dts: { bundle: true, autoExtension: true },
+      source: { entry: pluginEntry },
+      output: { externals: pluginExternals },
+    },
+    {
+      format: 'cjs',
+      syntax: ['node 20'],
+      dts: { bundle: true, autoExtension: true },
+      source: { entry: pluginEntry },
+      output: { externals: pluginExternals },
     },
   ],
 });

@@ -6,6 +6,7 @@ import {
   type CliPlugin,
   defineConfig,
 } from '@modern-js/app-tools';
+import { routeTypesPlugin } from 'modernjs-typed-routes/plugin';
 
 // ---------------------------------------------------------------------------
 // SPIKE plugin (roadmap task 0.2, 2026-07-12) — kept as REFERENCE, not
@@ -109,5 +110,5 @@ const spikePlugin = (): CliPlugin<AppTools> => ({
 
 // https://modernjs.dev/en/configure/app/usage
 export default defineConfig({
-  plugins: [appTools()],
+  plugins: [appTools(), routeTypesPlugin()],
 });
