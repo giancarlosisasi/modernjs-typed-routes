@@ -18,6 +18,11 @@ import {
 buildPath('/whatever');
 buildPath('/whatever', { params: { x: 'y' }, searchParams: { a: 1 } });
 
+// Before the first generation NOTHING may error — the helpers degrade to plain
+// string paths with permissive optional params (never a required options arg).
 declare const nav: ReturnType<typeof useNavigate>;
 nav.navigateTo('/free-form');
 nav.navigateTo('/free-form', { params: { anything: 'goes' }, replace: true });
+nav.createUrl('/free-form');
+nav.createUrl('/free-form', { params: { anything: 'goes' }, hash: 'top' });
+nav.goBack();

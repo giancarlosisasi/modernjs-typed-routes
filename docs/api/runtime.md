@@ -32,16 +32,54 @@ Same typing as `Link` over the router's `Navigate` (`replace`, `state`, … pass
 const { navigateTo, createUrl, goBack, originalNavigate } = useNavigate();
 ```
 
+Returns `NavigateHelpers`:
+
 | Member | Signature |
 |---|---|
-| `navigateTo` | `<P extends RoutePath>(to: P, options?: NavigateToOptions<P>) => void` |
-| `createUrl` | `<P extends RoutePath>(to: P, options?: BuildOptions<P>) => string` |
+| `navigateTo` | `<P extends RoutePath>(to: P, ...args: NavigateArgs<P>) => void` |
+| `createUrl` | `<P extends RoutePath>(to: P, ...args: BuildArgs<P>) => string` |
 | `goBack` | `() => void` |
 | `originalNavigate` | React Router's raw `NavigateFunction` (escape hatch) |
 
 `NavigateToOptions<P>` = `BuildOptions<P> & { replace?: boolean; state?: unknown }`.
 `BuildOptions<P>` = `{ params: RouteParams<P>; searchParams?; hash? }` with `params` conditionally
 required/optional depending on the route.
+
+The rest-tuple (`NavigateArgs<P>` / `BuildArgs<P>`) is what makes the **options object itself**
+required exactly when the route has required params — `navigateTo('/blog/[id]')` is a type error,
+`navigateTo('/about')` is not:
+
+```ts
+navigateTo('/about');                              // ✅ no options needed
+navigateTo('/blog/[id]', { params: { id: 42 } });  // ✅
+navigateTo('/blog/[id]');                          // ❌ options (with `params`) required
+```
+
+:::warning Re-exporting the helpers from a library
+Only relevant if you build a **library** on top of this one (`declaration: true`, and your own
+package has no generated routes). Returning a helper with an *inferred* type makes TypeScript
+synthesize the signature when it writes your `.d.ts`, and synthesizing flattens the rest-tuple —
+your consumers lose the conditional `params` requirement.
+
+Annotate the return type with the exported types and the conditional survives:
+
+```ts
+import { useNavigate, type NavigateHelpers } from 'modernjs-typed-routes';
+
+// ❌ inferred → your .d.ts emits `(to: P, options?: NavigateToOptions<P>)`; params never required
+export function useGo() {
+  return useNavigate().navigateTo;
+}
+
+// ✅ annotated → your .d.ts keeps `...args: NavigateArgs<P>`
+export function useGo(): NavigateHelpers['navigateTo'] {
+  return useNavigate().navigateTo;
+}
+```
+
+Apps (which generate routes, so `Register` is populated) are unaffected — and re-exporting
+`useNavigate`, `Link` or `buildPath` directly is always safe.
+:::
 
 ### `useTypedParams(path)`
 
@@ -90,6 +128,8 @@ Behavior details:
 | `SearchParamsInit` | `Record<string, string \| number \| boolean>` |
 | `BuildOptions<P>` | Options for `buildPath` / `createUrl` (`params` conditionally required) |
 | `NavigateToOptions<P>` | `BuildOptions<P> & { replace?; state? }` |
+| `BuildArgs<P>` / `NavigateArgs<P>` | The rest-tuple that makes the options object itself required iff the route has required params |
+| `NavigateHelpers` | Return type of `useNavigate()` |
 
 ### Entry-scoped types (multi-entry apps)
 

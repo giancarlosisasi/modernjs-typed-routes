@@ -35,6 +35,21 @@ buildPath('/admin/users/[userId]');
 declare const nav: ReturnType<typeof useNavigate>;
 nav.navigateTo('/admin');
 nav.navigateTo('/admin/users/[userId]', { params: { userId: 2 } });
+nav.navigateTo('/blog/[id]', { params: { id: 42 } });
+nav.createUrl('/admin');
+nav.createUrl('/admin/users/[userId]', { params: { userId: 2 } });
+
+// the conditional rule holds across BOTH entries, not just the first one
+// @ts-expect-error — options REQUIRED for /admin/users/[userId]
+nav.navigateTo('/admin/users/[userId]');
+// @ts-expect-error — options REQUIRED for /blog/[id] (the other entry)
+nav.navigateTo('/blog/[id]');
+// @ts-expect-error — options REQUIRED for /admin/users/[userId]
+nav.createUrl('/admin/users/[userId]');
+// @ts-expect-error — params key missing
+nav.navigateTo('/admin/users/[userId]', {});
+// @ts-expect-error — not a route in ANY entry
+nav.navigateTo('/nowhere');
 
 // --- entry-scoped props for strict teams -------------------------------------
 

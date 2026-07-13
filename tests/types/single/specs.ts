@@ -4,7 +4,10 @@
  */
 import { expectTypeOf } from 'expect-type';
 import type {
+  BuildArgs,
+  BuildOptions,
   NavigateArgs,
+  NavigateHelpers,
   NavigateToOptions,
   RegisterEntryName,
   RouteParams,
@@ -87,3 +90,34 @@ navigateTo('/blog/[id]', { params: { id: true } });
 expectTypeOf<NavigateToOptions<'/blog/[id]'>>().toMatchTypeOf<{
   params: { id: string | number };
 }>();
+
+// --- the rest-tuple ARITY is the contract, and it must survive dts emit ------
+//
+// `params`-required routes make the options object itself required; static and
+// optional-param routes make it omittable. Asserting the tuples directly (not
+// just call sites) states the invariant that 0.1.0 lost when declaration emit
+// flattened `...args: NavigateArgs<P>` into `options?:` — see NavigateHelpers.
+
+expectTypeOf<NavigateArgs<'/blog/[id]'>>().toEqualTypeOf<
+  [options: NavigateToOptions<'/blog/[id]'>]
+>();
+expectTypeOf<BuildArgs<'/blog/[id]'>>().toEqualTypeOf<
+  [options: BuildOptions<'/blog/[id]'>]
+>();
+expectTypeOf<NavigateArgs<'/about'>>().toEqualTypeOf<
+  [options?: NavigateToOptions<'/about'>]
+>();
+expectTypeOf<NavigateArgs<'/users/[id$]'>>().toEqualTypeOf<
+  [options?: NavigateToOptions<'/users/[id$]'>]
+>();
+expectTypeOf<NavigateArgs<'/docs/$'>>().toEqualTypeOf<
+  [options: NavigateToOptions<'/docs/$'>]
+>();
+
+// …and the hook hands back exactly those rest-tuple signatures
+expectTypeOf<NavigateHelpers['navigateTo']>().toEqualTypeOf<
+  <P extends RoutePath>(to: P, ...args: NavigateArgs<P>) => void
+>();
+expectTypeOf<NavigateHelpers['createUrl']>().toEqualTypeOf<
+  <P extends RoutePath>(to: P, ...args: BuildArgs<P>) => string
+>();

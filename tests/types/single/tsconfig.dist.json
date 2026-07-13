@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "modernjs-typed-routes": ["../../../dist/index.d.ts"]
+    }
+  },
+  "include": ["./*.ts", "./*.tsx", "./*.d.ts"]
+}

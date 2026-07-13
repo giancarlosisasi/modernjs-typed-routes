@@ -73,7 +73,9 @@
     "release": "pnpm build && changeset publish",
     "test:e2e": "rstest --config rstest.e2e.config.ts",
     "test:e2e:update": "node scripts/update-playground-snapshot.mjs",
-    "test:types": "tsc -p tests/types/single && tsc -p tests/types/multi && tsc -p tests/types/empty"
+    "test:types": "pnpm run test:types:src && pnpm run test:types:dist",
+    "test:types:src": "tsc -p tests/types/single && tsc -p tests/types/multi && tsc -p tests/types/empty",
+    "test:types:dist": "pnpm run build && tsc -p tests/types/single/tsconfig.dist.json && tsc -p tests/types/multi/tsconfig.dist.json && tsc -p tests/types/empty/tsconfig.dist.json && tsc -p tests/types/single/tsconfig.dcts.json"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",

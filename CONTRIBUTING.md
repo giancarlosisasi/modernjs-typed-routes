@@ -56,6 +56,8 @@ scripts/                   snapshot update + playground typecheck helpers
 |---|---|---|
 | Unit (Rstest) | normalize/emit/write/buildPath/options logic, incl. byte-exact generated-file snapshots | `pnpm rstest` (or watch: `pnpm test:watch`) |
 | Type-level | the typed API itself: valid/invalid paths, params required/optional/forbidden, entry isolation, empty-Register fallback | `pnpm test:types` |
+| ↳ against `src` | that the type *machinery* is correct | `pnpm test:types:src` |
+| ↳ against `dist` | that the machinery **survives declaration emit** — the same specs recompiled against the built `index.d.ts`/`index.d.cts`, which is what consumers actually resolve. Rebuilds `dist/` first, so it can never pass against a stale artifact | `pnpm test:types:dist` |
 | Docs snippets | every docs code block compiles against the documented Register | `pnpm check:docs-snippets` |
 | Playground typecheck | the dogfooding app typechecks against the real generated types | `pnpm check:playground` |
 | **All of the above** | | **`pnpm test`** |
@@ -67,7 +69,14 @@ scripts/                   snapshot update + playground typecheck helpers
 Notes:
 
 - **`pnpm build` before `test:e2e` or `lint:package`** — both consume `dist/`. Stale dist means
-  confusing failures.
+  confusing failures. (`test:types:dist` consumes `dist/` too, but builds it itself — a stale
+  artifact there would silently *pass*, which is worse than failing.)
+- **Types are only as good as what's SHIPPED.** Testing against `src` proves the machinery, not the
+  artifact: TypeScript's declaration emit must *synthesize* any signature you don't write out, and
+  synthesizing flattens a rest parameter whose type resolves to a concrete tuple — which is exactly
+  how `useNavigate()`'s conditional `params` requirement was lost in 0.1.0 while every `src`-based
+  test stayed green. If you add an exported value, give it an **explicit return type** and make sure
+  the `dist` type projects cover it.
 - The E2E suite is serial by design and generous with timeouts (usually well under a minute, up
   to a few minutes on slow machines); quirks (Windows process kill, ports, transient Modern.js
   rebuild errors) are documented in
