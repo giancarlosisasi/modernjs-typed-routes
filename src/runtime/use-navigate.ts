@@ -6,6 +6,7 @@
  * `NavigateArgs<P>` rest-tuple so the options object is REQUIRED exactly when
  * the route has required params (D8) — same public ergonomics.
  */
+import type { NavigateFunction } from '@modern-js/runtime/router';
 import { useNavigate as useRouterNavigate } from '@modern-js/runtime/router';
 import { useCallback, useMemo } from 'react';
 import { toRealUrl, toRouterPath, useBasename } from './basename';
@@ -25,7 +26,33 @@ type LooseNavigateOptions = {
   state?: unknown;
 };
 
-export function useNavigate() {
+/**
+ * Return type of {@link useNavigate} — written out EXPLICITLY on purpose.
+ *
+ * With an inferred return type, declaration emit has to synthesize these
+ * signatures, and synthesizing expands a rest parameter whose type is a
+ * concrete tuple. Inside this package `Register` is empty, so `NavigateArgs<P>`
+ * is no longer deferred (its check type holds no `P`) and eagerly resolves to
+ * the permissive `[options?: …]` branch — which the emitter then flattens into
+ * `options?: NavigateToOptions<P>` in the `.d.ts`. That silently drops the
+ * conditional forever: consumers augment `Register` too late, because the
+ * shipped declaration no longer HAS a conditional to re-evaluate, and
+ * `navigateTo('/blog/[id]')` compiles with no params (bug found via the
+ * playground, 2026-07-13).
+ *
+ * Annotating the return type makes declaration emit COPY this alias by name and
+ * emit `...args: NavigateArgs<P>` verbatim, so the conditional survives into the
+ * `.d.ts` and re-runs against the consumer's `Register`. `tests/types/*` run the
+ * same specs against BOTH `src` and the built `dist/index.d.ts` to pin this.
+ */
+export type NavigateHelpers = {
+  navigateTo: <P extends RoutePath>(to: P, ...args: NavigateArgs<P>) => void;
+  createUrl: <P extends RoutePath>(to: P, ...args: BuildArgs<P>) => string;
+  goBack: () => void;
+  originalNavigate: NavigateFunction;
+};
+
+export function useNavigate(): NavigateHelpers {
   const originalNavigate = useRouterNavigate();
   const basename = useBasename();
 

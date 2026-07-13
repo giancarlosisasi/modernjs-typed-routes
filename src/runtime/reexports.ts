@@ -10,5 +10,6 @@ export type { LinkProps } from './link';
 export { Link } from './link';
 export type { NavigateProps } from './navigate';
 export { Navigate } from './navigate';
+export type { NavigateHelpers } from './use-navigate';
 export { useNavigate } from './use-navigate';
 export { useTypedParams } from './use-typed-params';
