@@ -43,7 +43,16 @@ export function parseArgs(argv, defaults) {
       options[key] = eq === -1 ? true : argv[i].slice(eq + 1) !== 'false';
     } else {
       const raw = eq === -1 ? argv[++i] : arg.slice(eq + 1);
-      options[key] = typeof options[key] === 'number' ? Number(raw) : raw;
+      if (typeof options[key] === 'number') {
+        const value = Number(raw);
+        if (!Number.isFinite(value)) {
+          console.error(`--${key} needs a numeric value, got: ${raw}`);
+          process.exit(1);
+        }
+        options[key] = value;
+      } else {
+        options[key] = raw;
+      }
     }
   }
   return options;

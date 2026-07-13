@@ -23,7 +23,10 @@ import { fileURLToPath } from 'node:url';
 import { writeRouteFiles } from './synthesize-routes.mjs';
 import { fmtMs, parseArgs, stats } from './util.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const ROOT = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../..',
+);
 const APP = path.join(ROOT, 'examples/bench-app');
 const ROUTES_DIR = path.join(APP, 'src/routes');
 const GEN_FILE = path.join(APP, 'src/routes.gen.d.ts');
@@ -46,22 +49,36 @@ if (!existsSync(MODERN_BIN)) {
   );
   process.exit(1);
 }
+if (!existsSync(path.join(ROOT, 'dist/plugin/index.js'))) {
+  console.error(
+    'dist/plugin/index.js not found — run `pnpm build` first ' +
+      '(bench-app resolves the plugin from dist).',
+  );
+  process.exit(1);
+}
 
-/** Runs a command in the bench app, returns wall-clock ms. Fails loudly. */
+/**
+ * Runs a command in the bench app, returns wall-clock ms. Throws on failure
+ * (never `process.exit`, so callers' `finally` restores still run).
+ */
 function timeCommand(bin, args, extraEnv = {}) {
+  // Never inherit a stray plugin switch from the caller's shell — it would
+  // silently turn the "WITH plugin" runs into "without".
+  const env = { ...process.env, ...extraEnv };
+  if (!('BENCH_TYPED_ROUTES' in extraEnv)) delete env.BENCH_TYPED_ROUTES;
   const start = performance.now();
   const result = spawnSync('node', [bin, ...args], {
     cwd: APP,
     encoding: 'utf8',
     timeout: 900_000,
-    env: { ...process.env, ...extraEnv },
+    maxBuffer: 64 * 1024 * 1024,
+    env,
   });
   const elapsed = performance.now() - start;
   if (result.status !== 0) {
-    console.error(`\ncommand failed: node ${bin} ${args.join(' ')}`);
     console.error(result.stdout);
     console.error(result.stderr);
-    process.exit(1);
+    throw new Error(`command failed: node ${bin} ${args.join(' ')}`);
   }
   return { elapsed, stdout: result.stdout };
 }

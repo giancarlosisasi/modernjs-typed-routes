@@ -1,11 +1,13 @@
 /**
  * Deterministic synthetic route fixtures for the benchmarks.
  *
- * One "spec" = one matchable route. The kind cycle covers every route type
- * the generator understands (docs/guide/routes.md): static, deep static,
- * dynamic `[id]`, multi-param, optional `[id$]`, catch-all `$`, pathless
- * `__group` layouts, section layouts with index pages, flat `a.b.[c]`
- * directories, and `page.data.ts` sidecars.
+ * One "spec" = one matchable route. The kind cycle covers every
+ * file-convention route type (docs/guide/route-conventions.md): static, deep
+ * static, dynamic `[id]`, multi-param, optional `[id$]`, catch-all `$`,
+ * pathless `__group` layouts, section layouts with index pages, flat
+ * `a.b.[c]` directories, and `page.data.ts` sidecars. Config routes
+ * (`modern.routes.ts`) are not synthesized; per-node generation cost is
+ * identical.
  *
  * The same specs drive both benches:
  * - `buildRouteTree()` — the parsed `RouteNode[]` shape the plugin receives
@@ -136,7 +138,7 @@ function makeSpec(i, variant) {
           },
           {
             relPath: `mix-${i}/[id]/settings/page.data.ts`,
-            content: "export const loader = () => ({ ok: true });\n",
+            content: 'export const loader = () => ({ ok: true });\n',
           },
         ],
       };
@@ -251,6 +253,7 @@ export function buildRouteTree(count, variant = 0) {
     {
       type: 'nested',
       routeType: 'layout',
+      path: '/',
       isRoot: true,
       origin: 'file-system',
       children,

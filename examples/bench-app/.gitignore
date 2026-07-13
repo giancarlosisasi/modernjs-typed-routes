@@ -3,5 +3,5 @@
 node_modules
 dist/
 src/routes/
-src/routes.gen.d.ts
+src/routes.gen.d.ts*
 *.log

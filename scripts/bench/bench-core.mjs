@@ -25,7 +25,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildRouteTree } from './synthesize-routes.mjs';
 import { fmtKb, fmtMs, parseArgs, stats } from './util.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const ROOT = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../..',
+);
 const PLUGIN_DIST = path.join(ROOT, 'dist/plugin/index.js');
 
 const options = parseArgs(process.argv.slice(2), {
@@ -139,9 +142,7 @@ console.log(
   `modernjs-typed-routes core bench — dist/plugin, node ${process.version}, ` +
     `${os.platform()} ${os.arch()}, ${options.iterations} iterations/scenario\n`,
 );
-console.log(
-  'routes | output   | changed p50 (p95)      | unchanged p50 (p95)',
-);
+console.log('routes | output   | changed p50 (p95)      | unchanged p50 (p95)');
 console.log(
   '------ | -------- | ---------------------- | ----------------------',
 );

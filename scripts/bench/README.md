@@ -2,9 +2,11 @@
 
 Answers: **how much time does modernjs-typed-routes add to a big project?**
 Every run recreates its fixture from scratch (deterministic synthetic routes
-covering every supported route type: static, deep static, `[id]`, multi-param,
-`[id$]`, `$` catch-all, `__group` pathless layouts, section layouts + index
-pages, flat `a.b.[c]` dirs, `page.data.ts` sidecars).
+covering every file-convention route type: static, deep static, `[id]`,
+multi-param, `[id$]`, `$` catch-all, `__group` pathless layouts, section
+layouts + index pages, flat `a.b.[c]` dirs, `page.data.ts` sidecars.
+Config routes (`modern.routes.ts`) are not synthesized — their per-node
+generation cost is identical).
 
 ## `pnpm bench:core`
 
