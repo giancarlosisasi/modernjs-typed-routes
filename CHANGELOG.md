@@ -1,5 +1,13 @@
 # modernjs-typed-routes
 
+## 0.1.1
+
+### Patch Changes
+
+- dade9c8: Docs: replace the placeholder demo GIF with the real recording (route autocomplete,
+  typo'd-path compile error, required params) — shown on the README, the npm page and
+  the docs home.
+
 ## 0.1.0
 
 ### Minor Changes

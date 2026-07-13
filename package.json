@@ -1,6 +1,6 @@
 {
   "name": "modernjs-typed-routes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Type-safe routes for Modern.js apps — generates TypeScript types from your file-based routes and ships typed Link, Navigate and useNavigate wrappers.",
   "keywords": [
     "modernjs",
