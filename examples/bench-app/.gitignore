@@ -1,0 +1,7 @@
+# Everything under src/routes/ (and the generated types) is synthesized by
+# scripts/bench/bench-e2e.mjs on every run — never commit it.
+node_modules
+dist/
+src/routes/
+src/routes.gen.d.ts
+*.log

@@ -69,6 +69,8 @@
     "check:docs-snippets": "tsc -p examples/playground/docs-snippets",
     "check:playground": "pnpm --dir examples/playground exec tsc -p . --noEmit",
     "test:watch": "rstest --watch",
+    "bench:core": "node scripts/bench/bench-core.mjs",
+    "bench:e2e": "node scripts/bench/bench-e2e.mjs",
     "lint:package": "publint && attw --pack .",
     "release": "pnpm build && changeset publish",
     "test:e2e": "rstest --config rstest.e2e.config.ts",
