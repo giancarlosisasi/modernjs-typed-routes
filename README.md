@@ -9,7 +9,7 @@ TypeScript types from your file-based `routes/` folders, plus typed `Link`, `Nav
 `useNavigate` wrappers — so path typos and missing route params become **compile errors** instead
 of runtime 404s.
 
-> **Status: pre-release.** Not yet published to npm — v0.1.0 is on its way.
+**Docs: [modernjs-typed-routes.gio-labs.com](https://modernjs-typed-routes.gio-labs.com)**
 
 ![Demo: route autocomplete, typo'd path error, required params](./docs/public/demo.gif)
 
@@ -97,12 +97,14 @@ self-controlled (`App.tsx`) entries are out of scope — there's no conventional
 
 ## Documentation
 
-Full docs live in [`docs/`](./docs) (Rspress site — hosted version coming with the first release):
-guides for [getting started](./docs/guide/getting-started.md),
-[navigation](./docs/guide/navigation.md),
-[route conventions](./docs/guide/route-conventions.md) and
-[troubleshooting](./docs/guide/troubleshooting.md), plus the
-[plugin options](./docs/api/plugin-options.md) and [runtime API](./docs/api/runtime.md) reference.
+Full docs at **[modernjs-typed-routes.gio-labs.com](https://modernjs-typed-routes.gio-labs.com)**:
+guides for [getting started](https://modernjs-typed-routes.gio-labs.com/guide/getting-started),
+[navigation](https://modernjs-typed-routes.gio-labs.com/guide/navigation),
+[route conventions](https://modernjs-typed-routes.gio-labs.com/guide/route-conventions) and
+[troubleshooting](https://modernjs-typed-routes.gio-labs.com/guide/troubleshooting), plus the
+[plugin options](https://modernjs-typed-routes.gio-labs.com/api/plugin-options) and
+[runtime API](https://modernjs-typed-routes.gio-labs.com/api/runtime) reference
+(source in [`docs/`](./docs)).
 
 Related: [web-infra-dev/modern.js#6218](https://github.com/web-infra-dev/modern.js/issues/6218) —
 the upstream feature request this plugin answers.

@@ -14,6 +14,7 @@
   ],
   "license": "MIT",
   "author": "Giancarlos Isasi <giancarlos.isasi@gmail.com>",
+  "homepage": "https://modernjs-typed-routes.gio-labs.com",
   "packageManager": "pnpm@11.10.0",
   "engines": {
     "node": ">=20"
