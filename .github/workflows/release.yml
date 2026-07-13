@@ -42,8 +42,11 @@ jobs:
           cache: pnpm
 
       # Trusted publishing needs npm >= 11.5.1; Node 22's bundled npm is older.
+      # Pinned to the npm 11 line: npm 12 wraps `info --json` output in an
+      # array and reshapes error JSON, which changesets 2.31 can't parse
+      # (it then re-publishes existing versions and crashes on the E403).
       - name: Update npm for OIDC support
-        run: npm install -g npm@latest && npm --version
+        run: npm install -g npm@11 && npm --version
 
       - name: Install
         run: pnpm install --frozen-lockfile
