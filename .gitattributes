@@ -1,0 +1,15 @@
+# Force LF at checkout everywhere. GitHub's windows-latest runners ship with
+# core.autocrlf=true, which would convert the working tree to CRLF and break
+# Biome (lf enforced) and the byte-exact E2E snapshot comparison.
+* text=auto eol=lf
+
+# Binaries — never translate.
+*.gif binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.webm binary
+*.ico binary
+*.woff binary
+*.woff2 binary
